@@ -1,4 +1,5 @@
 import csv
+import sys
 
 def inventory_cost(filename):
     with open(filename) as FH:
@@ -6,13 +7,21 @@ def inventory_cost(filename):
         headers = next(rows)
         total = 0.0
         for row in rows:
-            quant = int(row[1])
-            price = float(row[2])
-            total += quant*price
-            
+            try:
+                quant = int(row[1])
+                price = float(row[2])
+                total += quant*price
+            except ValueError as e:
+                print("Bad row",row)
+                print("Reason",e)
+                
     return total
             
-
-cost = inventory_cost("Data/inventory.csv")
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = 'Data/inventory.csv'
+    
+cost = inventory_cost(filename)
 print("Total Cost",cost)
 
