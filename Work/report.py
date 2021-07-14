@@ -1,7 +1,4 @@
-""" S10Q01
-INVENTORY REPORT PROBLEM:
-Get the name of the text file from the user. 
-Check if all the sentences in that text file begin with a capital letter.
+""" Read inventory as a List of Tuples
 
 """
 import sys
