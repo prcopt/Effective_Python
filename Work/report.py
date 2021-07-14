@@ -1,4 +1,4 @@
-""" Read inventory as a List of Tuples
+"""  Read Inventory file modified from List of Tuples to List of Dictionaries
 
 """
 import sys
@@ -12,8 +12,10 @@ def read_inventory(filename):
         with open(filename) as FH:
             rows = csv.reader(FH)
             headers = next(rows)
+#            keys = headers.split()
+            print(headers)
             for row in rows:
-                inventory.append((row[0],int(row[1]),float(row[2])))
+                inventory.append({headers[0]:row[0],headers[1]:int(row[1]),headers[2]:float(row[2])})
             i += 1
     except FileNotFoundError:
         print("File:",filename, "Not Found: Execution Terminated.")
@@ -24,11 +26,13 @@ def read_inventory(filename):
             
 # Main starts here
 if __name__ == "__main__":
-#    inventory = list()
+    # Reading inventory file and building List of tuples
     inventory = read_inventory("Data\inventory.csv")
     print(inventory)
-    inv_cost = sum(p[1]*p[2] for p in inventory)
+    inv_cost = sum(p["quant"]*p["price"] for p in inventory)
     print("inv_cost:",inv_cost)
+
+
         
         
         
