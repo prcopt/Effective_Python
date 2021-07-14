@@ -26,7 +26,7 @@ def read_inventory(filename):
             
 # Main starts here
 if __name__ == "__main__":
-    # Reading inventory file and building List of tuples
+    # Reading inventory file and building List of Dictionaries
     inventory = read_inventory("Data\inventory.csv")
     print(inventory)
     inv_cost = sum(p["quant"]*p["price"] for p in inventory)
