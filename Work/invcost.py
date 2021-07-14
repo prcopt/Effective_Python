@@ -22,16 +22,23 @@ def inventory_cost(filename):
         sys.exit("")
     return total
 
+def test():
+    print ("TEST")
+    
+
 def get_folder_path_and_filename(fname):
     path = str(pathlib.Path(__file__).parent.resolve())+'\\Data\\'
     return path+fname
 
-if len(sys.argv) == 2:
-    filename = get_folder_path_and_filename(sys.argv[1])
-else:
-    fname = str.upper(input("Enter Inventory File Name:"))
-    filename = get_folder_path_and_filename(fname)
+#Main Starts here
+# Main starts here
+if __name__ == "__main__":
+    if len(sys.argv) >= 2:
+        filename = get_folder_path_and_filename(sys.argv[1])
+    else:
+        fname = str.upper(input("Enter Inventory File Name:"))
+        filename = get_folder_path_and_filename(fname)
 
-cost = inventory_cost(filename)
-print("Total Cost",cost)
+    cost = inventory_cost(filename)
+    print("Total Cost",cost)
 
