@@ -9,13 +9,13 @@ def inventory_cost(filename):
             print("Rows:",rows)
             headers = next(rows)
             total = 0.0
-            for row in rows:
+            for row_no, row in enumerate(rows,start=1):
                 try:
                     quant = int(row[1])
                     price = float(row[2])
                     total += quant*price
                 except ValueError as e:
-                    print("Bad row",row)
+                    print("Row:",row_no,"Bad row",row)
                     print("Reason",e)
     except FileNotFoundError:
         print("File:",filename[filename.rfind("\\")+1:]," Not Found: Execution Terminated")
