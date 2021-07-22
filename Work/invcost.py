@@ -1,3 +1,5 @@
+""" When inventory files have the flexibility to order the data in random columns
+"""
 import csv
 import sys
 import pathlib
@@ -6,24 +8,30 @@ def inventory_cost(filename):
     try:
         with open(filename) as FH:
             rows = csv.reader(FH)
-            print("Rows:",rows)
-            headers = next(rows)
-            total = 0.0
+            header = next(rows)
+            total = 0
             for row_no, row in enumerate(rows,start=1):
                 try:
-                    quant = int(row[1])
-                    price = float(row[2])
-                    total += quant*price
+                    values = row
+                    set = dict(zip(header,values))
+                    total += float(set['price'])*int(set['quant'])
                 except ValueError as e:
-                    print("Row:",row_no,"Bad row",row)
-                    print("Reason",e)
+                    print("ValueError: Row:",row_no,"Couldn't convert:",row)
+                    print("Reason:",e)
+                except IndexError as e:
+                    print("IndexError: Row:",row_no,"Skipping a row:",row)
+                    print("Reason:",e)
+                    continue
+                except KeyError as e:
+                    print("KeyError: Row:",row_no,"Skipping a row:",row)
+                    print("Reason:",e)
+            
     except FileNotFoundError:
         print("File:",filename[filename.rfind("\\")+1:]," Not Found: Execution Terminated")
         sys.exit("")
     return total
 
-def test():
-    print ("TEST")
+
     
 
 def get_folder_path_and_filename(fname):
@@ -31,7 +39,6 @@ def get_folder_path_and_filename(fname):
     return path+fname
 
 #Main Starts here
-# Main starts here
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         filename = get_folder_path_and_filename(sys.argv[1])
