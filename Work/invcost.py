@@ -1,4 +1,6 @@
 """ When inventory files have the flexibility to order the data in random columns
+    The earlier version checked-in will also work with inventorydate.csv where an
+    additional Date information is also provided.
 """
 import csv
 import sys
