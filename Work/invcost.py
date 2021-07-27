@@ -5,32 +5,37 @@
 import csv
 import sys
 import pathlib
+from report import read_inventory
 
 def inventory_cost(filename):
-    try:
-        with open(filename) as FH:
-            rows = csv.reader(FH)
-            header = next(rows)
-            total = 0
-            for row_no, row in enumerate(rows,start=1):
-                try:
-                    values = row
-                    set = dict(zip(header,values))
-                    total += float(set['price'])*int(set['quant'])
-                except ValueError as e:
-                    print("ValueError: Row:",row_no,"Couldn't convert:",row)
-                    print("Reason:",e)
-                except IndexError as e:
-                    print("IndexError: Row:",row_no,"Skipping a row:",row)
-                    print("Reason:",e)
-                    continue
-                except KeyError as e:
-                    print("KeyError: Row:",row_no,"Skipping a row:",row)
-                    print("Reason:",e)
-            
-    except FileNotFoundError:
-        print("File:",filename[filename.rfind("\\")+1:]," Not Found: Execution Terminated")
-        sys.exit("")
+    inv = read_inventory(filename)
+    total = 0
+    for pr in inv:
+        total += pr.cost()
+##    try:
+##        with open(filename) as FH:
+##            rows = csv.reader(FH)
+##            header = next(rows)
+##            total = 0
+##            for row_no, row in enumerate(rows,start=1):
+##                try:
+##                    values = row
+##                    set = dict(zip(header,values))
+##                    total += float(set['price'])*int(set['quant'])
+##                except ValueError as e:
+##                    print("ValueError: Row:",row_no,"Couldn't convert:",row)
+##                    print("Reason:",e)
+##                except IndexError as e:
+##                    print("IndexError: Row:",row_no,"Skipping a row:",row)
+##                    print("Reason:",e)
+##                    continue
+##                except KeyError as e:
+##                    print("KeyError: Row:",row_no,"Skipping a row:",row)
+##                    print("Reason:",e)
+##            
+##    except FileNotFoundError:
+##        print("File:",filename[filename.rfind("\\")+1:]," Not Found: Execution Terminated")
+##        sys.exit("")
     return total
 
 
