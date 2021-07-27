@@ -4,6 +4,7 @@ WORKING WITH DATA: Inventory Report Generation - Q12
 import sys
 import csv
 import pathlib
+from product import Product
 def read_inventory(filename):
     try:
         inventory = list()
@@ -13,7 +14,11 @@ def read_inventory(filename):
             for row_no,row in enumerate(rows,start=1):
                 try:
                     values = row
-                    inventory.append(dict(zip(headers,values)))
+                    prod = dict(zip(headers,values))
+                    prod['quant'] = int(prod['quant'])
+                    prod['price'] = float(prod['price'])
+                    probj =Product(prod['name'],prod['quant'],prod['price'])
+                    inventory.append(probj)
                 except ValueError as e:
                     print("ValueError: Row:",row_no,"Couldn't convert:",row)
                     print("Reason:",e)
@@ -59,18 +64,17 @@ def make_report(inventory,prices):
     new_price = list()
     change = list()
     for p in inventory:
-        if p['name'] in list(prices):
-            idx = list(prices).index(p['name'])
-            new_price.append(prices[p['name']])
-            change.append(float(prices[p['name']])- float( p['price']))
-    table = [(p["name"],p["quant"],np,c) for p,np,c in zip(inventory,new_price,change)]
+        if p.name in prices:
+            new_price.append(prices[p.name])
+            change.append(prices[p.name]- p.price)
+    table = [(p.name,p.quant,np,c) for p,np,c in zip(inventory,new_price,change)]
     return table
 
 # Main starts here
 if __name__ == "__main__":
     # Reading inventory file and building List of tuples
     inventory = read_inventory("Data\inventorydate.csv")
-    curr_inv_cost = sum(int(p["quant"])* float(p["price"]) for p in inventory)
+    curr_inv_cost = sum(int(p.quant)* float(p.price) for p in inventory)
     print("Total cost:",curr_inv_cost)
 
     # Reading latest price file and building alist of Dictionary
@@ -79,9 +83,8 @@ if __name__ == "__main__":
     
     # Compute present value of inventory
     for p in inventory:
-            if p['name'] in list(prices):
-                idx = list(prices).index(p['name'])
-                new_inv_cost += int(p['quant'])* float(prices[p['name']])
+            if p.name in prices:
+                new_inv_cost += p.quant* prices[p.name]
     print("Present Value:",new_inv_cost)
     
     # Printing Total Gain/Loss
